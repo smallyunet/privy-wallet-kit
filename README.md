@@ -1,6 +1,11 @@
 # Privy Wallet Kit 🛠️
 
+[![npm version](https://img.shields.io/npm/v/privy-wallet-kit.svg?style=flat-square)](https://www.npmjs.com/package/privy-wallet-kit)
+[![npm downloads](https://img.shields.io/npm/dm/privy-wallet-kit.svg?style=flat-square)](https://www.npmjs.com/package/privy-wallet-kit)
+[![License](https://img.shields.io/npm/l/privy-wallet-kit.svg?style=flat-square)](https://github.com/smallyunet/privy-wallet-kit/blob/main/LICENSE)
+
 **Privy Wallet Kit** is an open-source React UI component library designed specifically for **Privy Embedded Wallets**.
+
 
 It provides developers with "drop-in" components (like Token Lists, Transfer Forms, Transaction History) so you don't have to rebuild the UI for Privy's headless wallet system from scratch.
 
@@ -16,11 +21,14 @@ It provides developers with "drop-in" components (like Token Lists, Transfer For
 
 ## 📦 Installation
 
+You can find the package on [npm](https://www.npmjs.com/package/privy-wallet-kit).
+
 ```bash
 npm install privy-wallet-kit
 # Peer dependencies
 npm install @privy-io/react-auth viem react react-dom
 ```
+
 
 ## 🚀 Usage
 
