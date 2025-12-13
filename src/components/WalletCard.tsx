@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useWallets } from '@privy-io/react-auth';
-import { Copy, Wallet } from 'lucide-react';
+import { Wallet, ArrowDownToLine, Send } from 'lucide-react';
 import { useWalletBalance } from '../hooks/useWalletBalance';
-import { formatAddress, copyToClipboard } from '../utils';
+import { AddressPill } from './AddressPill';
+import { NetworkBadge } from './NetworkBadge';
+import { ReceiveModal } from './ReceiveModal';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 
@@ -12,54 +14,76 @@ function cn(...inputs: ClassValue[]) {
 
 interface WalletCardProps {
   className?: string;
+  onSendClick?: () => void;
 }
 
-export const WalletCard: React.FC<WalletCardProps> = ({ className }) => {
+export const WalletCard: React.FC<WalletCardProps> = ({ className, onSendClick }) => {
   const { wallets } = useWallets();
   const wallet = wallets[0];
   const { balance, loading } = useWalletBalance();
-  const [copied, setCopied] = React.useState(false);
-
-  const handleCopy = () => {
-    if (wallet?.address) {
-      copyToClipboard(wallet.address);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    }
-  };
+  const [showReceive, setShowReceive] = useState(false);
 
   if (!wallet) {
     return null;
   }
 
   return (
-    <div className={cn("p-6 rounded-xl bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 shadow-sm", className)}>
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400">
-          <Wallet size={16} />
-          <span className="text-sm font-medium">Total Balance</span>
+    <>
+      <div className={cn("p-6 rounded-xl bg-card text-card-foreground border border-border shadow-sm", className)}>
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2 text-muted-foreground">
+            <Wallet size={16} />
+            <span className="text-sm font-medium">Total Balance</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <NetworkBadge />
+            <AddressPill address={wallet.address} />
+          </div>
         </div>
-        <button 
-          onClick={handleCopy}
-          className="flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors text-xs text-gray-500"
-        >
-          <span>{formatAddress(wallet.address)}</span>
-          {copied ? <span className="text-green-500 text-[10px]">Copied!</span> : <Copy size={12} />}
-        </button>
+
+        <div className="mb-6">
+          <div className="flex items-baseline gap-1">
+            {loading ? (
+              <div className="h-8 w-32 bg-muted rounded animate-pulse" />
+            ) : (
+              <>
+                <span className="text-3xl font-bold">
+                  {balance ? parseFloat(balance).toFixed(4) : '0.00'}
+                </span>
+                <span className="text-lg font-medium text-muted-foreground">ETH</span>
+              </>
+            )}
+          </div>
+          <div className="text-sm text-muted-foreground mt-1">
+            ≈ $0.00 USD
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3">
+          <button 
+            onClick={onSendClick}
+            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-colors"
+          >
+            <Send size={18} />
+            Send
+          </button>
+          <button 
+            onClick={() => setShowReceive(true)}
+            className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium transition-colors"
+          >
+            <ArrowDownToLine size={18} />
+            Receive
+          </button>
+        </div>
       </div>
-      
-      <div className="flex items-baseline gap-1">
-        {loading ? (
-          <div className="h-8 w-32 bg-gray-200 dark:bg-gray-800 rounded animate-pulse" />
-        ) : (
-          <>
-            <span className="text-3xl font-bold text-gray-900 dark:text-white">
-              {balance ? parseFloat(balance).toFixed(4) : '0.00'}
-            </span>
-            <span className="text-lg font-medium text-gray-500">ETH</span>
-          </>
-        )}
-      </div>
-    </div>
+
+
+      <ReceiveModal 
+        isOpen={showReceive} 
+        onClose={() => setShowReceive(false)} 
+        address={wallet.address} 
+      />
+    </>
   );
 };
+
