@@ -63,7 +63,7 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
                 {tx.status === 'confirmed' && <CheckCircle2 size={10} className="text-green-500" />}
                 {tx.status === 'pending' && <Clock size={10} className="text-yellow-500" />}
                 {tx.status === 'failed' && <XCircle size={10} className="text-destructive" />}
-                <span>{new Date(tx.timestamp).toLocaleDateString()}</span>
+                <span>{new Date(tx.timestamp).toLocaleString()}</span>
                 <span>•</span>
                 <span>
                   {tx.type === 'send' ? formatAddress(tx.to || '') : formatAddress(tx.from || '')}

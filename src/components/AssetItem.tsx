@@ -2,6 +2,7 @@ import React from 'react';
 import { type Asset } from '../hooks/useAssetList';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { formatTokenAmount, formatCurrency } from '../utils';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -36,9 +37,9 @@ export const AssetItem: React.FC<AssetItemProps> = ({ asset, onClick, className 
         </div>
       </div>
       <div className="text-right">
-        <div className="font-medium text-foreground">{parseFloat(asset.balance).toFixed(4)}</div>
+        <div className="font-medium text-foreground">{formatTokenAmount(asset.balance)}</div>
         {/* Placeholder for USD value - to be implemented */}
-        <div className="text-xs text-muted-foreground">$0.00</div>
+        <div className="text-xs text-muted-foreground">{formatCurrency(0)}</div>
       </div>
     </div>
   );
