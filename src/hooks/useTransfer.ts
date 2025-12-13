@@ -1,5 +1,12 @@
 import { useWallets } from '@privy-io/react-auth';
-import { createPublicClient, createWalletClient, custom, parseAbi, parseUnits, type Address } from 'viem';
+import {
+  createPublicClient,
+  createWalletClient,
+  custom,
+  parseAbi,
+  parseUnits,
+  type Address,
+} from 'viem';
 import { useState } from 'react';
 
 export interface TransferParams {
@@ -59,10 +66,10 @@ export const useTransfer = () => {
       }
 
       setTxHash(hash);
-      
+
       // Wait for receipt (optional, but good for UX)
       await publicClient.waitForTransactionReceipt({ hash });
-      
+
       return hash;
     } catch (err) {
       console.error('Transfer failed:', err);

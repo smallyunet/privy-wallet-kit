@@ -22,7 +22,12 @@ interface TransferFormProps {
   className?: string;
 }
 
-export const TransferForm: React.FC<TransferFormProps> = ({ tokens = [], onReview, onCancel, className }) => {
+export const TransferForm: React.FC<TransferFormProps> = ({
+  tokens = [],
+  onReview,
+  onCancel,
+  className,
+}) => {
   const [to, setTo] = useState('');
   const [amount, setAmount] = useState('');
   const [selectedToken, setSelectedToken] = useState<TokenDefinition | undefined>(undefined);
@@ -45,14 +50,19 @@ export const TransferForm: React.FC<TransferFormProps> = ({ tokens = [], onRevie
     onReview({
       to,
       amount,
-      token: selectedToken
+      token: selectedToken,
     });
   };
 
   return (
-    <div className={cn("p-6 bg-card text-card-foreground rounded-xl border border-border shadow-sm", className)}>
+    <div
+      className={cn(
+        'p-6 bg-card text-card-foreground rounded-xl border border-border shadow-sm',
+        className,
+      )}
+    >
       <div className="flex items-center gap-3 mb-6">
-        <button 
+        <button
           onClick={onCancel}
           className="p-1 -ml-1 rounded-full hover:bg-accent hover:text-accent-foreground transition-colors text-muted-foreground"
         >
@@ -76,9 +86,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({ tokens = [], onRevie
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-foreground mb-1">
-            Amount
-          </label>
+          <label className="block text-sm font-medium text-foreground mb-1">Amount</label>
           <div className="relative">
             <input
               type="number"
@@ -96,19 +104,17 @@ export const TransferForm: React.FC<TransferFormProps> = ({ tokens = [], onRevie
 
         {tokens.length > 0 && (
           <div>
-            <label className="block text-sm font-medium text-foreground mb-1">
-              Asset
-            </label>
+            <label className="block text-sm font-medium text-foreground mb-1">Asset</label>
             <select
               value={selectedToken?.address || ''}
               onChange={(e) => {
-                const token = tokens.find(t => t.address === e.target.value);
+                const token = tokens.find((t) => t.address === e.target.value);
                 setSelectedToken(token);
               }}
               className="w-full px-3 py-2 rounded-lg border border-input bg-background text-foreground focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
             >
               <option value="">Native Token (ETH)</option>
-              {tokens.map(token => (
+              {tokens.map((token) => (
                 <option key={token.address} value={token.address}>
                   {token.symbol} - {token.name}
                 </option>
@@ -118,9 +124,7 @@ export const TransferForm: React.FC<TransferFormProps> = ({ tokens = [], onRevie
         )}
 
         {error && (
-          <div className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg">
-            {error}
-          </div>
+          <div className="text-destructive text-sm bg-destructive/10 p-3 rounded-lg">{error}</div>
         )}
 
         <button
@@ -133,4 +137,3 @@ export const TransferForm: React.FC<TransferFormProps> = ({ tokens = [], onRevie
     </div>
   );
 };
-

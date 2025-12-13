@@ -22,7 +22,7 @@ const SAMPLE_TOKENS: TokenDefinition[] = [
     symbol: 'WETH',
     name: 'Wrapped Ether',
     decimals: 18,
-  }
+  },
 ];
 
 // Sample transactions
@@ -34,7 +34,7 @@ const SAMPLE_HISTORY: Transaction[] = [
     symbol: 'ETH',
     status: 'confirmed',
     timestamp: Date.now() - 1000 * 60 * 60 * 2, // 2 hours ago
-    from: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e'
+    from: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
   },
   {
     hash: '0x456...def',
@@ -43,8 +43,8 @@ const SAMPLE_HISTORY: Transaction[] = [
     symbol: 'USDC',
     status: 'confirmed',
     timestamp: Date.now() - 1000 * 60 * 60 * 24, // 1 day ago
-    to: '0x123d35Cc6634C0532925a3b844Bc454e4438f123'
-  }
+    to: '0x123d35Cc6634C0532925a3b844Bc454e4438f123',
+  },
 ];
 
 type View = 'overview' | 'send' | 'review';
@@ -63,7 +63,7 @@ function WalletView() {
     return (
       <div className="flex flex-col items-center justify-center min-h-screen gap-4">
         <h1 className="text-2xl font-bold">Privy Wallet Kit Demo</h1>
-        <button 
+        <button
           onClick={login}
           className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
@@ -80,13 +80,13 @@ function WalletView() {
 
   const handleConfirmSend = async () => {
     if (!transferDetails) return;
-    
+
     try {
       await sendTransaction({
         to: transferDetails.to as `0x${string}`,
         amount: transferDetails.amount,
         tokenAddress: transferDetails.token?.address,
-        decimals: transferDetails.token?.decimals
+        decimals: transferDetails.token?.decimals,
       });
       alert('Transaction Sent!');
       setView('overview');
@@ -103,10 +103,7 @@ function WalletView() {
           {view === 'overview' ? 'My Wallet' : 'Send'}
         </h1>
         {view === 'overview' && (
-          <button 
-            onClick={logout}
-            className="text-sm text-red-500 hover:text-red-600"
-          >
+          <button onClick={logout} className="text-sm text-red-500 hover:text-red-600">
             Logout
           </button>
         )}
@@ -121,8 +118,8 @@ function WalletView() {
 
             <section>
               <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Assets</h2>
-              <AssetList 
-                tokens={SAMPLE_TOKENS} 
+              <AssetList
+                tokens={SAMPLE_TOKENS}
                 onAssetClick={(asset) => console.log('Clicked asset:', asset)}
               />
             </section>
@@ -135,7 +132,7 @@ function WalletView() {
         )}
 
         {view === 'send' && (
-          <TransferForm 
+          <TransferForm
             tokens={SAMPLE_TOKENS}
             onReview={handleReview}
             onCancel={() => setView('overview')}

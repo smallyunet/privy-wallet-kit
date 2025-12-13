@@ -25,28 +25,34 @@ interface TransactionHistoryProps {
   onTransactionClick?: (tx: Transaction) => void;
 }
 
-export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ transactions, className, onTransactionClick }) => {
+export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
+  transactions,
+  className,
+  onTransactionClick,
+}) => {
   if (transactions.length === 0) {
     return (
-      <div className={cn("text-center py-8 text-gray-500", className)}>
-        No transactions found
-      </div>
+      <div className={cn('text-center py-8 text-gray-500', className)}>No transactions found</div>
     );
   }
 
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       {transactions.map((tx) => (
-        <div 
+        <div
           key={tx.hash}
           onClick={() => onTransactionClick?.(tx)}
           className="flex items-center justify-between p-3 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer border border-transparent hover:border-border"
         >
           <div className="flex items-center gap-3">
-            <div className={cn(
-              "w-8 h-8 rounded-full flex items-center justify-center",
-              tx.type === 'send' ? "bg-muted text-muted-foreground" : "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-            )}>
+            <div
+              className={cn(
+                'w-8 h-8 rounded-full flex items-center justify-center',
+                tx.type === 'send'
+                  ? 'bg-muted text-muted-foreground'
+                  : 'bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400',
+              )}
+            >
               {tx.type === 'send' ? <ArrowUpRight size={16} /> : <ArrowDownLeft size={16} />}
             </div>
             <div>
@@ -59,24 +65,26 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({ transact
                 {tx.status === 'failed' && <XCircle size={10} className="text-destructive" />}
                 <span>{new Date(tx.timestamp).toLocaleDateString()}</span>
                 <span>•</span>
-                <span>{tx.type === 'send' ? formatAddress(tx.to || '') : formatAddress(tx.from || '')}</span>
+                <span>
+                  {tx.type === 'send' ? formatAddress(tx.to || '') : formatAddress(tx.from || '')}
+                </span>
               </div>
             </div>
           </div>
           <div className="text-right">
-            <div className={cn(
-              "font-medium",
-              tx.type === 'send' ? "text-foreground" : "text-green-600 dark:text-green-400"
-            )}>
-              {tx.type === 'send' ? '-' : '+'}{tx.amount}
+            <div
+              className={cn(
+                'font-medium',
+                tx.type === 'send' ? 'text-foreground' : 'text-green-600 dark:text-green-400',
+              )}
+            >
+              {tx.type === 'send' ? '-' : '+'}
+              {tx.amount}
             </div>
-            <div className="text-xs text-muted-foreground">
-              {tx.symbol}
-            </div>
+            <div className="text-xs text-muted-foreground">{tx.symbol}</div>
           </div>
         </div>
       ))}
     </div>
   );
 };
-

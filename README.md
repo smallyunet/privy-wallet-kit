@@ -6,7 +6,6 @@
 
 **Privy Wallet Kit** is an open-source React UI component library designed specifically for **Privy Embedded Wallets**.
 
-
 It provides developers with "drop-in" components (like Token Lists, Transfer Forms, Transaction History) so you don't have to rebuild the UI for Privy's headless wallet system from scratch.
 
 > 🚧 **Status: Active Development** - This library is currently in early alpha.
@@ -28,7 +27,6 @@ npm install privy-wallet-kit
 # Peer dependencies
 npm install @privy-io/react-auth viem react react-dom
 ```
-
 
 ## 🚀 Usage
 
@@ -63,9 +61,9 @@ import { useWalletBalance } from 'privy-wallet-kit';
 const MyBalance = () => {
   // Fetch Native ETH Balance
   const { balance, loading, error } = useWalletBalance();
-  
+
   // Or Fetch ERC20 Balance
-  // const { balance } = useWalletBalance('0x...'); 
+  // const { balance } = useWalletBalance('0x...');
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error loading balance</div>;
@@ -108,4 +106,5 @@ const WalletPage = () => {
 ## 📄 License
 
 MIT
+
 # privy-wallet-kit

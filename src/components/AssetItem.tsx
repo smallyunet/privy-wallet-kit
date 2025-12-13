@@ -15,11 +15,11 @@ interface AssetItemProps {
 
 export const AssetItem: React.FC<AssetItemProps> = ({ asset, onClick, className }) => {
   return (
-    <div 
+    <div
       onClick={() => onClick?.(asset)}
       className={cn(
-        "flex items-center justify-between p-3 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer border border-transparent hover:border-border",
-        className
+        'flex items-center justify-between p-3 rounded-lg hover:bg-accent hover:text-accent-foreground transition-colors cursor-pointer border border-transparent hover:border-border',
+        className,
       )}
     >
       <div className="flex items-center gap-3">
@@ -36,13 +36,10 @@ export const AssetItem: React.FC<AssetItemProps> = ({ asset, onClick, className 
         </div>
       </div>
       <div className="text-right">
-        <div className="font-medium text-foreground">
-          {parseFloat(asset.balance).toFixed(4)}
-        </div>
+        <div className="font-medium text-foreground">{parseFloat(asset.balance).toFixed(4)}</div>
         {/* Placeholder for USD value - to be implemented */}
         <div className="text-xs text-muted-foreground">$0.00</div>
       </div>
     </div>
   );
 };
-

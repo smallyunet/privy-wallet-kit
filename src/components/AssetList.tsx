@@ -19,7 +19,7 @@ export const AssetList: React.FC<AssetListProps> = ({ tokens, className, onAsset
 
   if (loading && assets.length === 0) {
     return (
-      <div className={cn("space-y-2", className)}>
+      <div className={cn('space-y-2', className)}>
         {[1, 2, 3].map((i) => (
           <div key={i} className="h-16 bg-muted rounded-lg animate-pulse" />
         ))}
@@ -29,23 +29,15 @@ export const AssetList: React.FC<AssetListProps> = ({ tokens, className, onAsset
 
   if (assets.length === 0) {
     return (
-      <div className={cn("text-center py-8 text-muted-foreground", className)}>
-        No assets found
-      </div>
+      <div className={cn('text-center py-8 text-muted-foreground', className)}>No assets found</div>
     );
   }
 
-
   return (
-    <div className={cn("space-y-2", className)}>
+    <div className={cn('space-y-2', className)}>
       {assets.map((asset) => (
-        <AssetItem 
-          key={asset.address} 
-          asset={asset} 
-          onClick={onAssetClick} 
-        />
+        <AssetItem key={asset.address} asset={asset} onClick={onAssetClick} />
       ))}
     </div>
   );
 };
-

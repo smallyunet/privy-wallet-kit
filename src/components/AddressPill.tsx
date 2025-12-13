@@ -26,11 +26,11 @@ export const AddressPill: React.FC<AddressPillProps> = ({ address, className }) 
   };
 
   return (
-    <button 
+    <button
       onClick={handleCopy}
       className={cn(
-        "flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors text-xs text-muted-foreground",
-        className
+        'flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-accent hover:text-accent-foreground transition-colors text-xs text-muted-foreground',
+        className,
       )}
     >
       <span>{formatAddress(address)}</span>
@@ -44,4 +44,3 @@ export const AddressPill: React.FC<AddressPillProps> = ({ address, className }) 
     </button>
   );
 };
-

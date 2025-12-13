@@ -29,7 +29,7 @@ export const useWalletBalance = (tokenAddress?: Address) => {
 
         if (tokenAddress) {
           // Fetch ERC20 Balance
-          // We need decimals to format correctly. 
+          // We need decimals to format correctly.
           // Ideally we should fetch decimals once or pass it in, but here we fetch it.
           const [rawBalance, decimals] = await Promise.all([
             publicClient.readContract({
@@ -44,7 +44,7 @@ export const useWalletBalance = (tokenAddress?: Address) => {
               functionName: 'decimals',
             }),
           ]);
-          
+
           setBalance(formatUnits(rawBalance, decimals));
         } else {
           // Fetch Native ETH Balance

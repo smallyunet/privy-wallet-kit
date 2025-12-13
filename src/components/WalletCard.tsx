@@ -29,7 +29,12 @@ export const WalletCard: React.FC<WalletCardProps> = ({ className, onSendClick }
 
   return (
     <>
-      <div className={cn("p-6 rounded-xl bg-card text-card-foreground border border-border shadow-sm", className)}>
+      <div
+        className={cn(
+          'p-6 rounded-xl bg-card text-card-foreground border border-border shadow-sm',
+          className,
+        )}
+      >
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Wallet size={16} />
@@ -54,20 +59,18 @@ export const WalletCard: React.FC<WalletCardProps> = ({ className, onSendClick }
               </>
             )}
           </div>
-          <div className="text-sm text-muted-foreground mt-1">
-            ≈ $0.00 USD
-          </div>
+          <div className="text-sm text-muted-foreground mt-1">≈ $0.00 USD</div>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
-          <button 
+          <button
             onClick={onSendClick}
             className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-colors"
           >
             <Send size={18} />
             Send
           </button>
-          <button 
+          <button
             onClick={() => setShowReceive(true)}
             className="flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg bg-secondary hover:bg-secondary/80 text-secondary-foreground font-medium transition-colors"
           >
@@ -77,13 +80,11 @@ export const WalletCard: React.FC<WalletCardProps> = ({ className, onSendClick }
         </div>
       </div>
 
-
-      <ReceiveModal 
-        isOpen={showReceive} 
-        onClose={() => setShowReceive(false)} 
-        address={wallet.address} 
+      <ReceiveModal
+        isOpen={showReceive}
+        onClose={() => setShowReceive(false)}
+        address={wallet.address}
       />
     </>
   );
 };
-

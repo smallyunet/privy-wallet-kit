@@ -42,14 +42,15 @@ export const useAssetList = (tokens: TokenDefinition[]) => {
         // Create contract calls for all tokens
         // For simplicity and compatibility, we'll use Promise.all with individual reads for now
         const balances = await Promise.all(
-          tokens.map(token => 
-            publicClient.readContract({
-              address: token.address,
-              abi: parseAbi(['function balanceOf(address) view returns (uint256)']),
-              functionName: 'balanceOf',
-              args: [address],
-            }) as Promise<bigint>
-          )
+          tokens.map(
+            (token) =>
+              publicClient.readContract({
+                address: token.address,
+                abi: parseAbi(['function balanceOf(address) view returns (uint256)']),
+                functionName: 'balanceOf',
+                args: [address],
+              }) as Promise<bigint>,
+          ),
         );
 
         const assetsWithBalance: Asset[] = tokens.map((token, index) => ({

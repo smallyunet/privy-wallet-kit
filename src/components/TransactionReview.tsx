@@ -18,18 +18,23 @@ interface TransactionReviewProps {
   className?: string;
 }
 
-export const TransactionReview: React.FC<TransactionReviewProps> = ({ 
-  details, 
-  onConfirm, 
-  onBack, 
-  loading, 
+export const TransactionReview: React.FC<TransactionReviewProps> = ({
+  details,
+  onConfirm,
+  onBack,
+  loading,
   error,
-  className 
+  className,
 }) => {
   return (
-    <div className={cn("p-6 bg-card text-card-foreground rounded-xl border border-border shadow-sm", className)}>
+    <div
+      className={cn(
+        'p-6 bg-card text-card-foreground rounded-xl border border-border shadow-sm',
+        className,
+      )}
+    >
       <div className="flex items-center gap-3 mb-6">
-        <button 
+        <button
           onClick={onBack}
           disabled={loading}
           className="p-1 -ml-1 rounded-full hover:bg-accent hover:text-accent-foreground transition-colors text-muted-foreground disabled:opacity-50"
@@ -44,9 +49,7 @@ export const TransactionReview: React.FC<TransactionReviewProps> = ({
           <div className="text-3xl font-bold mb-1">
             {details.amount} {details.token ? details.token.symbol : 'ETH'}
           </div>
-          <div className="text-sm text-muted-foreground">
-            ≈ $0.00 USD
-          </div>
+          <div className="text-sm text-muted-foreground">≈ $0.00 USD</div>
         </div>
 
         <div className="space-y-4">
@@ -54,7 +57,7 @@ export const TransactionReview: React.FC<TransactionReviewProps> = ({
             <span className="text-muted-foreground">To</span>
             <AddressPill address={details.to} />
           </div>
-          
+
           <div className="flex justify-between items-center py-3 border-b border-border">
             <span className="text-muted-foreground">Network</span>
             <span className="font-medium">Ethereum</span>
@@ -91,4 +94,3 @@ export const TransactionReview: React.FC<TransactionReviewProps> = ({
     </div>
   );
 };
-

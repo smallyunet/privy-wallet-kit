@@ -7,6 +7,3 @@ export * from './ReceiveModal';
 export * from './TransferForm';
 export * from './TransactionReview';
 export * from './TransactionHistory';
-
-
-

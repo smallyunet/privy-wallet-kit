@@ -28,23 +28,22 @@ export const NetworkBadge: React.FC<NetworkBadgeProps> = ({ className }) => {
 
   if (!wallet) return null;
 
-  // wallet.chainId is usually a string like "eip155:1" or just number/string. 
+  // wallet.chainId is usually a string like "eip155:1" or just number/string.
   // Privy wallets usually return chainId as string in format "eip155:1" for EVM.
   // Let's parse it.
-  
+
   const chainId = wallet.chainId.split(':')[1] || wallet.chainId;
   const networkName = CHAIN_NAMES[chainId] || `Chain ID: ${chainId}`;
 
   return (
-    <div className={cn(
-      "flex items-center gap-1.5 px-2 py-1 rounded-full bg-secondary border border-border",
-      className
-    )}>
+    <div
+      className={cn(
+        'flex items-center gap-1.5 px-2 py-1 rounded-full bg-secondary border border-border',
+        className,
+      )}
+    >
       <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-      <span className="text-xs font-medium text-secondary-foreground">
-        {networkName}
-      </span>
+      <span className="text-xs font-medium text-secondary-foreground">{networkName}</span>
     </div>
   );
 };
-

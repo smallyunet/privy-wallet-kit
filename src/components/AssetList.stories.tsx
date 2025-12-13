@@ -25,7 +25,7 @@ const SAMPLE_TOKENS = [
     symbol: 'WETH',
     name: 'Wrapped Ether',
     decimals: 18,
-  }
+  },
 ];
 
 export const Default: Story = {
