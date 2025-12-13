@@ -68,6 +68,7 @@ export const useAssetList = (tokens: TokenDefinition[]) => {
     };
 
     fetchBalances();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wallet, JSON.stringify(tokens)]); // Use stringified tokens to avoid infinite loop if array ref changes
 
   return { assets, loading, error };

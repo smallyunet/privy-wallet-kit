@@ -1,12 +1,10 @@
-import { createContext, useContext, useMemo } from 'react';
-
 // Mock Data
 const MOCK_WALLET = {
   address: '0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045', // vitalik.eth
   chainType: 'ethereum',
   chainId: 'eip155:1',
   getEthereumProvider: async () => window.ethereum || {
-    request: (args: { method: string, params?: any[] }) => {
+    request: (args: { method: string, params?: unknown[] }) => {
       if (args.method === 'eth_getBalance') {
         return Promise.resolve('0xde0b6b3a7640000'); // 1 ETH
       }
