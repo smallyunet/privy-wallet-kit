@@ -35,7 +35,15 @@ export default defineConfig({
     }
   },
   test: {
-    projects: [{
+    projects: [
+      {
+        name: 'unit',
+        test: {
+          environment: 'jsdom',
+          include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+        }
+      },
+      {
       extends: true,
       plugins: [
       // The plugin will run tests for the stories defined in your Storybook config
