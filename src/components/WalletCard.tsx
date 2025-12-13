@@ -3,7 +3,7 @@ import { useWallets } from '@privy-io/react-auth';
 import { Wallet, ArrowDownToLine, Send } from 'lucide-react';
 import { useWalletBalance } from '../hooks/useWalletBalance';
 import { AddressPill } from './AddressPill';
-import { NetworkBadge } from './NetworkBadge';
+import { NetworkBadge, NetworkBadgeView } from './NetworkBadge';
 import { ReceiveModal } from './ReceiveModal';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -12,20 +12,27 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface WalletCardProps {
+export interface WalletCardProps {
   className?: string;
   onSendClick?: () => void;
 }
 
-export const WalletCard: React.FC<WalletCardProps> = ({ className, onSendClick }) => {
-  const { wallets } = useWallets();
-  const wallet = wallets[0];
-  const { balance, loading } = useWalletBalance();
-  const [showReceive, setShowReceive] = useState(false);
+export interface WalletCardViewProps extends WalletCardProps {
+  address: string;
+  balance: string | null;
+  loading?: boolean;
+  chainId?: string;
+}
 
-  if (!wallet) {
-    return null;
-  }
+export const WalletCardView: React.FC<WalletCardViewProps> = ({
+  className,
+  onSendClick,
+  address,
+  balance,
+  loading,
+  chainId,
+}) => {
+  const [showReceive, setShowReceive] = useState(false);
 
   return (
     <>
@@ -41,8 +48,8 @@ export const WalletCard: React.FC<WalletCardProps> = ({ className, onSendClick }
             <span className="text-sm font-medium">Total Balance</span>
           </div>
           <div className="flex items-center gap-2">
-            <NetworkBadge />
-            <AddressPill address={wallet.address} />
+            {chainId ? <NetworkBadgeView chainId={chainId} /> : <NetworkBadge />}
+            <AddressPill address={address} />
           </div>
         </div>
 
@@ -83,8 +90,30 @@ export const WalletCard: React.FC<WalletCardProps> = ({ className, onSendClick }
       <ReceiveModal
         isOpen={showReceive}
         onClose={() => setShowReceive(false)}
-        address={wallet.address}
+        address={address}
       />
     </>
+  );
+};
+
+export const WalletCard: React.FC<WalletCardProps> = (props) => {
+  const { wallets } = useWallets();
+  const wallet = wallets[0];
+  const { balance, loading } = useWalletBalance();
+
+  if (!wallet) {
+    return null;
+  }
+
+  const chainId = wallet.chainId.split(':')[1] || wallet.chainId;
+
+  return (
+    <WalletCardView
+      {...props}
+      address={wallet.address}
+      balance={balance}
+      loading={loading}
+      chainId={chainId}
+    />
   );
 };

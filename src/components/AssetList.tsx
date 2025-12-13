@@ -8,15 +8,25 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface AssetListProps {
+export interface AssetListProps {
   tokens: TokenDefinition[];
   className?: string;
   onAssetClick?: (asset: Asset) => void;
 }
 
-export const AssetList: React.FC<AssetListProps> = ({ tokens, className, onAssetClick }) => {
-  const { assets, loading } = useAssetList(tokens);
+export interface AssetListViewProps {
+  assets: Asset[];
+  loading: boolean;
+  className?: string;
+  onAssetClick?: (asset: Asset) => void;
+}
 
+export const AssetListView: React.FC<AssetListViewProps> = ({
+  assets,
+  loading,
+  className,
+  onAssetClick,
+}) => {
   if (loading && assets.length === 0) {
     return (
       <div className={cn('space-y-2', className)}>
@@ -39,5 +49,18 @@ export const AssetList: React.FC<AssetListProps> = ({ tokens, className, onAsset
         <AssetItem key={asset.address} asset={asset} onClick={onAssetClick} />
       ))}
     </div>
+  );
+};
+
+export const AssetList: React.FC<AssetListProps> = ({ tokens, className, onAssetClick }) => {
+  const { assets, loading } = useAssetList(tokens);
+
+  return (
+    <AssetListView
+      assets={assets}
+      loading={loading}
+      className={className}
+      onAssetClick={onAssetClick}
+    />
   );
 };

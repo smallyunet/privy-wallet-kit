@@ -7,8 +7,12 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-interface NetworkBadgeProps {
+export interface NetworkBadgeProps {
   className?: string;
+}
+
+export interface NetworkBadgeViewProps extends NetworkBadgeProps {
+  chainId: string;
 }
 
 const CHAIN_NAMES: Record<string, string> = {
@@ -22,17 +26,7 @@ const CHAIN_NAMES: Record<string, string> = {
   '42161': 'Arbitrum',
 };
 
-export const NetworkBadge: React.FC<NetworkBadgeProps> = ({ className }) => {
-  const { wallets } = useWallets();
-  const wallet = wallets[0];
-
-  if (!wallet) return null;
-
-  // wallet.chainId is usually a string like "eip155:1" or just number/string.
-  // Privy wallets usually return chainId as string in format "eip155:1" for EVM.
-  // Let's parse it.
-
-  const chainId = wallet.chainId.split(':')[1] || wallet.chainId;
+export const NetworkBadgeView: React.FC<NetworkBadgeViewProps> = ({ className, chainId }) => {
   const networkName = CHAIN_NAMES[chainId] || `Chain ID: ${chainId}`;
 
   return (
@@ -46,4 +40,15 @@ export const NetworkBadge: React.FC<NetworkBadgeProps> = ({ className }) => {
       <span className="text-xs font-medium text-secondary-foreground">{networkName}</span>
     </div>
   );
+};
+
+export const NetworkBadge: React.FC<NetworkBadgeProps> = ({ className }) => {
+  const { wallets } = useWallets();
+  const wallet = wallets[0];
+
+  if (!wallet) return null;
+
+  const chainId = wallet.chainId.split(':')[1] || wallet.chainId;
+
+  return <NetworkBadgeView className={className} chainId={chainId} />;
 };
