@@ -87,11 +87,7 @@ export const WalletCardView: React.FC<WalletCardViewProps> = ({
         </div>
       </div>
 
-      <ReceiveModal
-        isOpen={showReceive}
-        onClose={() => setShowReceive(false)}
-        address={address}
-      />
+      <ReceiveModal isOpen={showReceive} onClose={() => setShowReceive(false)} address={address} />
     </>
   );
 };
