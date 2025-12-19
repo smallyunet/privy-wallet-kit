@@ -7,6 +7,7 @@ import { TransactionReview } from './components/TransactionReview';
 import { TransactionHistory, type Transaction } from './components/TransactionHistory';
 import { type TokenDefinition } from './hooks/useAssetList';
 import { useTransfer } from './hooks/useTransfer';
+import { NetworkSwitcher } from './components/NetworkSwitcher';
 import './App.css';
 
 // Sample tokens for testing (Base Sepolia or similar testnet recommended)
@@ -53,7 +54,7 @@ function WalletView() {
   const { ready, authenticated, login, logout } = usePrivy();
   const [view, setView] = useState<View>('overview');
   const [transferDetails, setTransferDetails] = useState<TransferDetails | null>(null);
-  const { sendTransaction, loading: transferLoading, error: transferError } = useTransfer();
+  const { sendTransaction, estimateGas, loading: transferLoading, error: transferError, gasEstimate } = useTransfer();
 
   if (!ready) {
     return <div className="flex items-center justify-center min-h-screen">Loading Privy...</div>;
@@ -73,9 +74,16 @@ function WalletView() {
     );
   }
 
-  const handleReview = (details: TransferDetails) => {
+  const handleReview = async (details: TransferDetails) => {
     setTransferDetails(details);
     setView('review');
+    // Trigger gas estimation
+    await estimateGas({
+      to: details.to as `0x${string}`,
+      amount: details.amount,
+      tokenAddress: details.token?.address,
+      decimals: details.token?.decimals,
+    });
   };
 
   const handleConfirmSend = async () => {
@@ -102,11 +110,14 @@ function WalletView() {
         <h1 className="text-xl font-bold text-gray-900 dark:text-white">
           {view === 'overview' ? 'My Wallet' : 'Send'}
         </h1>
-        {view === 'overview' && (
-          <button onClick={logout} className="text-sm text-red-500 hover:text-red-600">
-            Logout
-          </button>
-        )}
+        <div className="flex items-center gap-2">
+          <NetworkSwitcher />
+          {view === 'overview' && (
+            <button onClick={logout} className="text-sm text-red-500 hover:text-red-600">
+              Logout
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="space-y-6">
@@ -146,6 +157,7 @@ function WalletView() {
             onBack={() => setView('send')}
             loading={transferLoading}
             error={transferError}
+            gasEstimate={gasEstimate}
           />
         )}
       </div>

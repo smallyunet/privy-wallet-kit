@@ -15,16 +15,7 @@ export interface NetworkBadgeViewProps extends NetworkBadgeProps {
   chainId: string;
 }
 
-const CHAIN_NAMES: Record<string, string> = {
-  '1': 'Ethereum',
-  '11155111': 'Sepolia',
-  '137': 'Polygon',
-  '80001': 'Mumbai',
-  '8453': 'Base',
-  '84532': 'Base Sepolia',
-  '10': 'Optimism',
-  '42161': 'Arbitrum',
-};
+import { CHAIN_NAMES } from '../constants';
 
 export const NetworkBadgeView: React.FC<NetworkBadgeViewProps> = ({ className, chainId }) => {
   const networkName = CHAIN_NAMES[chainId] || `Chain ID: ${chainId}`;

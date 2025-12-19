@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNetwork } from '../hooks/useNetwork';
+import { CHAIN_NAMES } from '../constants';
 import { ArrowLeft, AlertCircle } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
@@ -16,6 +18,7 @@ interface TransactionReviewProps {
   loading?: boolean;
   error?: Error | null;
   className?: string;
+  gasEstimate?: string | null;
 }
 
 export const TransactionReview: React.FC<TransactionReviewProps> = ({
@@ -25,7 +28,11 @@ export const TransactionReview: React.FC<TransactionReviewProps> = ({
   loading,
   error,
   className,
+  gasEstimate,
 }) => {
+  const { chainId } = useNetwork();
+  const networkName = chainId ? (CHAIN_NAMES[chainId.toString()] || `Chain ID: ${chainId}`) : 'Unknown Network';
+
   return (
     <div
       className={cn(
@@ -60,12 +67,12 @@ export const TransactionReview: React.FC<TransactionReviewProps> = ({
 
           <div className="flex justify-between items-center py-3 border-b border-border">
             <span className="text-muted-foreground">Network</span>
-            <span className="font-medium">Ethereum</span>
+            <span className="font-medium">{networkName}</span>
           </div>
 
           <div className="flex justify-between items-center py-3 border-b border-border">
             <span className="text-muted-foreground">Estimated Gas</span>
-            <span className="font-medium">~0.0004 ETH</span>
+            <span className="font-medium">{gasEstimate ? `~${gasEstimate} ETH` : 'Loading...'}</span>
           </div>
         </div>
 

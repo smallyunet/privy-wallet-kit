@@ -16,6 +16,8 @@ It provides developers with "drop-in" components (like Token Lists, Transfer For
 - **🎣 Headless Hooks**: Logic is separated from UI. Use our hooks (`useWalletBalance`, `useTransfer`) to build your own custom UI if needed.
 - **🎨 Shadcn-like Architecture**: Built with Tailwind CSS. Components are fully customizable via `className` and designed to be copied/pasted or imported directly.
 - **⚡ Powered by Viem**: Robust and type-safe blockchain interactions.
+- **🔌 Network Management**: Built-in `NetworkSwitcher` and multi-chain support.
+- **⛽ Gas Estimation**: Automatic gas fee estimation for transactions.
 - **🔐 Zero Global State**: Relies on Privy's context. No Redux or Zustand required.
 
 ## 📦 Installation
@@ -56,33 +58,38 @@ export const App = () => {
 ### 2. Use Hooks (Headless)
 
 ```tsx
-import { useWalletBalance } from 'privy-wallet-kit';
+import { useWalletBalance, useNetwork, useTransfer } from 'privy-wallet-kit';
 
-const MyBalance = () => {
-  // Fetch Native ETH Balance
-  const { balance, loading, error } = useWalletBalance();
+const MyWallet = () => {
+  const { balance } = useWalletBalance();
+  const { chainId, switchNetwork } = useNetwork();
+  const { estimateGas, sendTransaction } = useTransfer();
 
-  // Or Fetch ERC20 Balance
-  // const { balance } = useWalletBalance('0x...');
-
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error loading balance</div>;
-
-  return <div>Balance: {balance} ETH</div>;
+  return (
+    <div>
+       <p>Balance: {balance} ETH</p>
+       <p>Network: {chainId}</p>
+       <button onClick={() => switchNetwork(1)}>Switch to Mainnet</button>
+    </div>
+  );
 };
 ```
 
-### 3. Use Components (Coming Soon)
+### 3. Use Components
 
 ```tsx
-import { TokenList, TransferCard } from 'privy-wallet-kit';
+import { TokenList, TransferForm, NetworkSwitcher } from 'privy-wallet-kit';
 import 'privy-wallet-kit/dist/style.css'; // Import styles
 
 const WalletPage = () => {
   return (
     <div className="p-4 max-w-md mx-auto space-y-4">
+      <NetworkSwitcher />
       <TokenList />
-      <TransferCard />
+      <TransferForm 
+         onReview={(details) => console.log(details)}
+         onCancel={() => console.log('cancelled')}
+      />
     </div>
   );
 };
@@ -91,7 +98,7 @@ const WalletPage = () => {
 ## 🗺️ Roadmap
 
 - [x] **Phase 1: Project Scaffolding** - Vite library mode, Tailwind setup.
-- [x] **Phase 2: Core Hooks** - `useWalletBalance`, `useAssetList`, `useTransfer`.
+- [x] **Phase 2: Core Hooks** - `useWalletBalance`, `useAssetList`, `useTransfer` (with Gas Est).
 - [ ] **Phase 3: UI Components** - `TokenList`, `AssetCard`, `TransferCard`.
 - [ ] **Phase 4: Utilities** - Formatting helpers.
 

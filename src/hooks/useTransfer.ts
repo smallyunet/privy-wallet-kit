@@ -22,6 +22,62 @@ export const useTransfer = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<Error | null>(null);
   const [txHash, setTxHash] = useState<string | null>(null);
+  const [gasEstimate, setGasEstimate] = useState<string | null>(null);
+
+  const estimateGas = async ({ to, amount, tokenAddress, decimals = 18 }: TransferParams) => {
+    if (!wallet) return;
+    setError(null);
+    try {
+      const provider = await wallet.getEthereumProvider();
+      const publicClient = createPublicClient({
+        transport: custom(provider),
+      });
+
+      const [account] = await (await wallet.getEthereumProvider()).request({ method: 'eth_requestAccounts' });
+      const amountBigInt = parseUnits(amount, decimals);
+      let gas;
+
+      if (tokenAddress) {
+        // ERC20 gas est
+        gas = await publicClient.estimateContractGas({
+          account: account as Address,
+          address: tokenAddress,
+          abi: parseAbi(['function transfer(address to, uint256 amount) returns (bool)']),
+          functionName: 'transfer',
+          args: [to, amountBigInt],
+        });
+      } else {
+        // Native gas est
+        gas = await publicClient.estimateGas({
+          account: account as Address,
+          to,
+          value: amountBigInt,
+        });
+      }
+
+      // Convert to ETH string for display (basic) - typically you want exact BigInt, 
+      // but for UI display we often just want a rough estimate.
+      // Actually standard practice is to return fees in ETH. 
+      // simple estimation: gasUnits * gasPrice
+      // let's just return the units for now or convert cleanly?
+      // The requirement says "string (in ETH)".
+
+      const gasPrice = await publicClient.getGasPrice();
+      // gas * gasPrice = wei
+      // formatEther(wei)
+
+      const estimatedFeeWei = gas * gasPrice;
+      // We need formatEther from viem
+      const { formatEther } = await import('viem');
+      setGasEstimate(formatEther(estimatedFeeWei));
+
+      return gas;
+    } catch (err) {
+      console.error('Gas estimation failed:', err);
+      // Don't set global error for estimation, just maybe log or set specific estimation error
+      // setError(err as Error); 
+    }
+  };
 
   const sendTransaction = async ({ to, amount, tokenAddress, decimals = 18 }: TransferParams) => {
     if (!wallet) {
@@ -80,5 +136,5 @@ export const useTransfer = () => {
     }
   };
 
-  return { sendTransaction, loading, error, txHash };
+  return { sendTransaction, estimateGas, loading, error, txHash, gasEstimate };
 };

@@ -5,7 +5,7 @@ import '../src/index.css';
 if (!('toJSON' in BigInt.prototype)) {
   Object.defineProperty(BigInt.prototype, 'toJSON', {
     get() {
-      return function (this: any) {
+      return function (this: bigint) {
         return this.toString();
       };
     },

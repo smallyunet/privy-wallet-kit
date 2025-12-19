@@ -1,6 +1,6 @@
 {
   "name": "privy-wallet-kit",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "main": "dist/privy-wallet-kit.umd.cjs",
   "module": "dist/privy-wallet-kit.js",
