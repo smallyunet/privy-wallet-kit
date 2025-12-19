@@ -1,6 +1,17 @@
 import type { Preview } from '@storybook/react-vite';
 import '../src/index.css';
 
+// Add BigInt serialization support
+if (!('toJSON' in BigInt.prototype)) {
+  Object.defineProperty(BigInt.prototype, 'toJSON', {
+    get() {
+      return function (this: any) {
+        return this.toString();
+      };
+    },
+  });
+}
+
 const preview: Preview = {
   parameters: {
     controls: {
