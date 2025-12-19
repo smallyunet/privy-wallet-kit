@@ -31,7 +31,9 @@ export const TransactionReview: React.FC<TransactionReviewProps> = ({
   gasEstimate,
 }) => {
   const { chainId } = useNetwork();
-  const networkName = chainId ? (CHAIN_NAMES[chainId.toString()] || `Chain ID: ${chainId}`) : 'Unknown Network';
+  const networkName = chainId
+    ? CHAIN_NAMES[chainId.toString()] || `Chain ID: ${chainId}`
+    : 'Unknown Network';
 
   return (
     <div
@@ -72,7 +74,9 @@ export const TransactionReview: React.FC<TransactionReviewProps> = ({
 
           <div className="flex justify-between items-center py-3 border-b border-border">
             <span className="text-muted-foreground">Estimated Gas</span>
-            <span className="font-medium">{gasEstimate ? `~${gasEstimate} ETH` : 'Loading...'}</span>
+            <span className="font-medium">
+              {gasEstimate ? `~${gasEstimate} ETH` : 'Loading...'}
+            </span>
           </div>
         </div>
 

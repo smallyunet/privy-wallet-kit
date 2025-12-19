@@ -67,9 +67,9 @@ const MyWallet = () => {
 
   return (
     <div>
-       <p>Balance: {balance} ETH</p>
-       <p>Network: {chainId}</p>
-       <button onClick={() => switchNetwork(1)}>Switch to Mainnet</button>
+      <p>Balance: {balance} ETH</p>
+      <p>Network: {chainId}</p>
+      <button onClick={() => switchNetwork(1)}>Switch to Mainnet</button>
     </div>
   );
 };
@@ -86,9 +86,9 @@ const WalletPage = () => {
     <div className="p-4 max-w-md mx-auto space-y-4">
       <NetworkSwitcher />
       <TokenList />
-      <TransferForm 
-         onReview={(details) => console.log(details)}
-         onCancel={() => console.log('cancelled')}
+      <TransferForm
+        onReview={(details) => console.log(details)}
+        onCancel={() => console.log('cancelled')}
       />
     </div>
   );

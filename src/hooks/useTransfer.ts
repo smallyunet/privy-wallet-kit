@@ -33,7 +33,9 @@ export const useTransfer = () => {
         transport: custom(provider),
       });
 
-      const [account] = await (await wallet.getEthereumProvider()).request({ method: 'eth_requestAccounts' });
+      const [account] = await (
+        await wallet.getEthereumProvider()
+      ).request({ method: 'eth_requestAccounts' });
       const amountBigInt = parseUnits(amount, decimals);
       let gas;
 
@@ -55,9 +57,9 @@ export const useTransfer = () => {
         });
       }
 
-      // Convert to ETH string for display (basic) - typically you want exact BigInt, 
+      // Convert to ETH string for display (basic) - typically you want exact BigInt,
       // but for UI display we often just want a rough estimate.
-      // Actually standard practice is to return fees in ETH. 
+      // Actually standard practice is to return fees in ETH.
       // simple estimation: gasUnits * gasPrice
       // let's just return the units for now or convert cleanly?
       // The requirement says "string (in ETH)".
@@ -75,7 +77,7 @@ export const useTransfer = () => {
     } catch (err) {
       console.error('Gas estimation failed:', err);
       // Don't set global error for estimation, just maybe log or set specific estimation error
-      // setError(err as Error); 
+      // setError(err as Error);
     }
   };
 

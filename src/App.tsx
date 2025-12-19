@@ -54,7 +54,13 @@ function WalletView() {
   const { ready, authenticated, login, logout } = usePrivy();
   const [view, setView] = useState<View>('overview');
   const [transferDetails, setTransferDetails] = useState<TransferDetails | null>(null);
-  const { sendTransaction, estimateGas, loading: transferLoading, error: transferError, gasEstimate } = useTransfer();
+  const {
+    sendTransaction,
+    estimateGas,
+    loading: transferLoading,
+    error: transferError,
+    gasEstimate,
+  } = useTransfer();
 
   if (!ready) {
     return <div className="flex items-center justify-center min-h-screen">Loading Privy...</div>;
