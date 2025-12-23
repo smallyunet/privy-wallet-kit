@@ -12,12 +12,14 @@ It provides developers with "drop-in" components (like Token Lists, Transfer For
 
 ## 🌟 Features
 
-- **🧩 Drop-in UI Components**: Ready-to-use components for common wallet operations.
-- **🎣 Headless Hooks**: Logic is separated from UI. Use our hooks (`useWalletBalance`, `useTransfer`) to build your own custom UI if needed.
+- **🧩 Drop-in UI Components**: Ready-to-use components for common wallet operations like `TokenList`, `TransferForm`, `SignMessageForm`, and `NFTGallery`.
+- **🎣 Headless Hooks**: Logic is separated from UI. Use our hooks (`useWalletBalance`, `useTransfer`, `useSignMessage`, `useNFTs`, `useTransactionHistory`) to build your own custom UI if needed.
 - **🎨 Shadcn-like Architecture**: Built with Tailwind CSS. Components are fully customizable via `className` and designed to be copied/pasted or imported directly.
 - **⚡ Powered by Viem**: Robust and type-safe blockchain interactions.
 - **🔌 Network Management**: Built-in `NetworkSwitcher` and multi-chain support.
 - **⛽ Gas Estimation**: Automatic gas fee estimation for transactions.
+- **📜 Transaction History**: Built-in history fetching with auto-refresh support.
+- **🖼️ NFT Support**: Gallery component for digital assets.
 - **🔐 Zero Global State**: Relies on Privy's context. No Redux or Zustand required.
 
 ## 📦 Installation

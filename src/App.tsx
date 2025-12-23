@@ -15,8 +15,15 @@ import './App.css';
 
 // Sample tokens for testing (Base Sepolia or similar testnet recommended)
 const SAMPLE_TOKENS: TokenDefinition[] = [
+  {
+    address: '0x036CbD53842c5426634e7929541eC2318f3dCF7e',
+    symbol: 'USDC',
+    name: 'USD Coin',
+    decimals: 6,
+  },
+];
 
-  type View = 'overview' | 'send' | 'review' | 'sign' | 'nfts';
+type View = 'overview' | 'send' | 'review' | 'sign' | 'nfts';
 
 function WalletView() {
   const { ready, authenticated, login, logout } = usePrivy();

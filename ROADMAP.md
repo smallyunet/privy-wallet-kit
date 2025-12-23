@@ -38,7 +38,7 @@ Build the visible building blocks that developers can drop into their apps.
   - Selector: Token selection.
 - [x] **`TransactionReview`**: A summary view before confirming the transaction (Gas fee est., Total).
 - [x] **`TransactionHistory`**: A list of past transactions (Sent/Received).
-  - Needs integration with an indexer or block explorer API (e.g., Viem logs or external API).
+  - Integrated with `useTransactionHistory` hook for auto-fetching.
 
 ## Phase 3: Developer Experience (DX) & Demo
 
@@ -52,11 +52,11 @@ Make it easy for developers to adopt and test.
   - Define a set of CSS variables for base colors (Primary, Background, Surface) to support Dark/Light mode easily.
 - [x] **Exports**: Ensure `src/index.ts` correctly exports all components and hooks.
 
-## Phase 4: Advanced Features (Future)
+## Phase 4: Advanced Features
 
-- [ ] **Network Switcher**: UI to switch between supported chains (Mainnet, Polygon, Base, etc.).
-
-- [ ] **NFT Gallery**: Simple grid view for owned NFTs.
+- [x] **Sign Message Support**: UI and hooks for signing plain text and typed data.
+- [/] **Network Switcher**: UI to switch between supported chains (Mainnet, Polygon, Base, etc.).
+- [x] **NFT Gallery**: Simple grid view for owned NFTs.
 - [ ] **Swap Interface**: (Optional) Basic UI for swapping tokens (integration with Uniswap/0x API).
 - [ ] **Fiat On-ramp**: Integration with providers (MoonPay/Stripe) if Privy supports it directly via UI.
 
