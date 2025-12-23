@@ -1,5 +1,5 @@
 import React from 'react';
-import { ArrowUpRight, ArrowDownLeft, Clock, CheckCircle2, XCircle } from 'lucide-react';
+import { ArrowUpRight, ArrowDownLeft, Clock, CheckCircle2, XCircle, Loader2 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
 import { formatAddress } from '../utils';
@@ -7,6 +7,8 @@ import { formatAddress } from '../utils';
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
+
+import { useTransactionHistory } from '../hooks/useTransactionHistory';
 
 export interface Transaction {
   hash: string;
@@ -20,16 +22,33 @@ export interface Transaction {
 }
 
 interface TransactionHistoryProps {
-  transactions: Transaction[];
+  transactions?: Transaction[];
   className?: string;
   onTransactionClick?: (tx: Transaction) => void;
+  autoFetch?: boolean;
 }
 
 export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
-  transactions,
+  transactions: propsTransactions,
   className,
   onTransactionClick,
+  autoFetch = true,
 }) => {
+  const { transactions: hookTransactions, loading } = useTransactionHistory({
+    enabled: autoFetch && !propsTransactions,
+  });
+
+  const transactions = propsTransactions || hookTransactions;
+
+  if (loading && transactions.length === 0) {
+    return (
+      <div className={cn('flex items-center justify-center py-8 text-muted-foreground', className)}>
+        <Loader2 size={20} className="animate-spin mr-2" />
+        <span>Loading transactions...</span>
+      </div>
+    );
+  }
+
   if (transactions.length === 0) {
     return (
       <div className={cn('text-center py-8 text-gray-500', className)}>No transactions found</div>

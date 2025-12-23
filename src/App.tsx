@@ -4,51 +4,19 @@ import { WalletCard } from './components/WalletCard';
 import { AssetList } from './components/AssetList';
 import { TransferForm, type TransferDetails } from './components/TransferForm';
 import { TransactionReview } from './components/TransactionReview';
-import { TransactionHistory, type Transaction } from './components/TransactionHistory';
+import { TransactionHistory } from './components/TransactionHistory';
 import { type TokenDefinition } from './hooks/useAssetList';
 import { useTransfer } from './hooks/useTransfer';
 import { NetworkSwitcher } from './components/NetworkSwitcher';
+import { SignMessageForm } from './components/SignMessageForm';
+import { NFTGallery } from './components/NFTGallery';
+import { Shield, Image, ArrowLeft } from 'lucide-react';
 import './App.css';
 
 // Sample tokens for testing (Base Sepolia or similar testnet recommended)
 const SAMPLE_TOKENS: TokenDefinition[] = [
-  {
-    address: '0x036CbD53842c5426634e7929541eC2318f3dCF7e', // USDC on Base Sepolia (Example)
-    symbol: 'USDC',
-    name: 'USD Coin',
-    decimals: 6,
-  },
-  {
-    address: '0x4200000000000000000000000000000000000006', // WETH on Base
-    symbol: 'WETH',
-    name: 'Wrapped Ether',
-    decimals: 18,
-  },
-];
 
-// Sample transactions
-const SAMPLE_HISTORY: Transaction[] = [
-  {
-    hash: '0x123...abc',
-    type: 'receive',
-    amount: '0.5',
-    symbol: 'ETH',
-    status: 'confirmed',
-    timestamp: Date.now() - 1000 * 60 * 60 * 2, // 2 hours ago
-    from: '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
-  },
-  {
-    hash: '0x456...def',
-    type: 'send',
-    amount: '100',
-    symbol: 'USDC',
-    status: 'confirmed',
-    timestamp: Date.now() - 1000 * 60 * 60 * 24, // 1 day ago
-    to: '0x123d35Cc6634C0532925a3b844Bc454e4438f123',
-  },
-];
-
-type View = 'overview' | 'send' | 'review';
+  type View = 'overview' | 'send' | 'review' | 'sign' | 'nfts';
 
 function WalletView() {
   const { ready, authenticated, login, logout } = usePrivy();
@@ -133,6 +101,27 @@ function WalletView() {
               <WalletCard onSendClick={() => setView('send')} />
             </section>
 
+            <div className="grid grid-cols-2 gap-4">
+              <button
+                onClick={() => setView('sign')}
+                className="p-4 bg-card border border-border rounded-xl hover:bg-accent hover:text-accent-foreground transition-all flex flex-col items-center gap-2"
+              >
+                <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                  <Shield size={20} />
+                </div>
+                <span className="text-sm font-medium">Sign</span>
+              </button>
+              <button
+                onClick={() => setView('nfts')}
+                className="p-4 bg-card border border-border rounded-xl hover:bg-accent hover:text-accent-foreground transition-all flex flex-col items-center gap-2"
+              >
+                <div className="w-10 h-10 rounded-full bg-green-500/10 flex items-center justify-center text-green-500">
+                  <Image size={20} />
+                </div>
+                <span className="text-sm font-medium">NFTs</span>
+              </button>
+            </div>
+
             <section>
               <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Assets</h2>
               <AssetList
@@ -143,7 +132,7 @@ function WalletView() {
 
             <section>
               <h2 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">History</h2>
-              <TransactionHistory transactions={SAMPLE_HISTORY} />
+              <TransactionHistory />
             </section>
           </>
         )}
@@ -154,6 +143,31 @@ function WalletView() {
             onReview={handleReview}
             onCancel={() => setView('overview')}
           />
+        )}
+
+        {view === 'sign' && (
+          <div className="space-y-4">
+            <button
+              onClick={() => setView('overview')}
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft size={16} /> Back
+            </button>
+            <SignMessageForm onSuccess={(sig) => console.log('Signed:', sig)} />
+          </div>
+        )}
+
+        {view === 'nfts' && (
+          <div className="space-y-4">
+            <button
+              onClick={() => setView('overview')}
+              className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              <ArrowLeft size={16} /> Back
+            </button>
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Your NFTs</h2>
+            <NFTGallery />
+          </div>
         )}
 
         {view === 'review' && transferDetails && (
