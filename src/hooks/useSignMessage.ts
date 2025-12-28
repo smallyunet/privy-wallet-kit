@@ -1,5 +1,5 @@
 import { useWallets } from '@privy-io/react-auth';
-import { createWalletClient, custom, type Address } from 'viem';
+import { createWalletClient, custom } from 'viem';
 import { useState } from 'react';
 
 export const useSignMessage = () => {
