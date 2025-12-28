@@ -30,7 +30,7 @@ jobs:
           GIT_TAG=${{ github.ref_name }}
           # Remove 'v' prefix from tag if it exists
           VERSION_FROM_TAG=${GIT_TAG#v}
-          
+
           if [ "$PACKAGE_VERSION" != "$VERSION_FROM_TAG" ]; then
             echo "Error: package.json version ($PACKAGE_VERSION) does not match git tag ($GIT_TAG)"
             exit 1
