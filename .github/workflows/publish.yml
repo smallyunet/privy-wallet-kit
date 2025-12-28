@@ -24,6 +24,19 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Verify version matches tag
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          GIT_TAG=${{ github.ref_name }}
+          # Remove 'v' prefix from tag if it exists
+          VERSION_FROM_TAG=${GIT_TAG#v}
+          
+          if [ "$PACKAGE_VERSION" != "$VERSION_FROM_TAG" ]; then
+            echo "Error: package.json version ($PACKAGE_VERSION) does not match git tag ($GIT_TAG)"
+            exit 1
+          fi
+          echo "Version check passed: $PACKAGE_VERSION matches $GIT_TAG"
+
       - name: Build
         run: npm run build
 
