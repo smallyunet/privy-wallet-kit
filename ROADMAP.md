@@ -62,7 +62,7 @@ Make it easy for developers to adopt and test.
 
 ## Phase 5: Quality Assurance & Release
 
-- [ ] **Unit Tests**: Test hooks logic (mocking Viem/Privy).
-- [ ] **Component Tests**: Ensure UI renders correctly under different states (Loading, Error, Empty).
+- [x] **Unit Tests**: Test hooks logic (mocking Viem/Privy).
+- [x] **Component Tests**: Ensure UI renders correctly under different states (Loading, Error, Empty).
 - [ ] **Documentation**: Detailed README with props definitions and usage examples.
 - [ ] **NPM Publish**: Setup CI/CD for automated publishing.

@@ -14,6 +14,12 @@ export default defineConfig({
       include: ['src'],
     }),
   ],
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['src/**/*.test.ts', 'src/**/*.test.tsx'],
+  },
   build: {
     lib: {
       entry: resolve(__dirname, 'src/index.ts'),
@@ -42,3 +48,4 @@ export default defineConfig({
     },
   },
 });
+

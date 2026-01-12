@@ -39,6 +39,7 @@ export const useSignMessage = () => {
     }
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const signTypedData = async (typedData: any) => {
     if (!wallet) throw new Error('No wallet connected');
 
