@@ -43,9 +43,11 @@ export default defineConfig({
           'react-dom': 'ReactDOM',
           '@privy-io/react-auth': 'PrivyReactAuth',
           viem: 'viem',
+          'lucide-react': 'lucideReact',
+          clsx: 'clsx',
+          'tailwind-merge': 'tailwindMerge',
         },
       },
     },
   },
 });
-

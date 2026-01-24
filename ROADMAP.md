@@ -55,7 +55,7 @@ Make it easy for developers to adopt and test.
 ## Phase 4: Advanced Features
 
 - [x] **Sign Message Support**: UI and hooks for signing plain text and typed data.
-- [/] **Network Switcher**: UI to switch between supported chains (Mainnet, Polygon, Base, etc.).
+- [x] **Network Switcher**: UI to switch between supported chains (Mainnet, Polygon, Base, etc.).
 - [x] **NFT Gallery**: Simple grid view for owned NFTs.
 - [ ] **Swap Interface**: (Optional) Basic UI for swapping tokens (integration with Uniswap/0x API).
 - [ ] **Fiat On-ramp**: Integration with providers (MoonPay/Stripe) if Privy supports it directly via UI.
@@ -64,5 +64,5 @@ Make it easy for developers to adopt and test.
 
 - [x] **Unit Tests**: Test hooks logic (mocking Viem/Privy).
 - [x] **Component Tests**: Ensure UI renders correctly under different states (Loading, Error, Empty).
-- [ ] **Documentation**: Detailed README with props definitions and usage examples.
-- [ ] **NPM Publish**: Setup CI/CD for automated publishing.
+- [/] **Documentation**: Detailed README with props definitions and usage examples.
+- [/] **NPM Publish**: Setup CI/CD for automated publishing.

@@ -1,10 +1,14 @@
 {
   "name": "privy-wallet-kit",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "type": "module",
   "main": "dist/privy-wallet-kit.umd.cjs",
   "module": "dist/privy-wallet-kit.js",
   "types": "dist/index.d.ts",
+  "style": "dist/privy-wallet-kit.css",
+  "sideEffects": [
+    "**/*.css"
+  ],
   "files": [
     "dist"
   ],
@@ -13,7 +17,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/privy-wallet-kit.js",
       "require": "./dist/privy-wallet-kit.umd.cjs"
-    }
+    },
+    "./style.css": "./dist/privy-wallet-kit.css"
   },
   "scripts": {
     "dev": "vite",

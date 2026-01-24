@@ -3,35 +3,58 @@ import { useNetwork } from '../hooks/useNetwork';
 import { ChevronDown } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { CHAIN_NAMES, DEFAULT_SUPPORTED_CHAIN_IDS } from '../constants';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-// Common chains config
-const SUPPORTED_CHAINS = [
-  { id: 1, name: 'Ethereum', color: 'bg-blue-500' },
-  { id: 11155111, name: 'Sepolia', color: 'bg-purple-500' },
-  { id: 137, name: 'Polygon', color: 'bg-indigo-500' },
-  { id: 8453, name: 'Base', color: 'bg-blue-600' },
-  { id: 10, name: 'Optimism', color: 'bg-red-500' },
-];
+type NetworkOption = { id: number; name: string; color?: string };
+
+const DEFAULT_CHAIN_COLORS: Record<number, string> = {
+  1: 'bg-blue-500',
+  11155111: 'bg-purple-500',
+  137: 'bg-indigo-500',
+  8453: 'bg-blue-600',
+  84532: 'bg-sky-500',
+  10: 'bg-red-500',
+  42161: 'bg-cyan-500',
+};
 
 interface NetworkSwitcherProps {
   className?: string;
+  chains?: NetworkOption[];
+  onError?: (error: unknown) => void;
 }
 
-export const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ className }) => {
+export const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ className, chains, onError }) => {
   const { chainId, switchNetwork } = useNetwork();
 
-  const currentChain = SUPPORTED_CHAINS.find((c) => c.id === chainId) || {
-    id: chainId,
-    name: 'Unknown Network',
-    color: 'bg-gray-500',
-  };
+  const options: NetworkOption[] =
+    chains ??
+    DEFAULT_SUPPORTED_CHAIN_IDS.map((id) => ({
+      id,
+      name: CHAIN_NAMES[String(id)] ?? `Chain ${id}`,
+      color: DEFAULT_CHAIN_COLORS[id] ?? 'bg-gray-500',
+    }));
 
-  const handleSwitch = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    switchNetwork(Number(e.target.value));
+  const currentChain =
+    (chainId ? options.find((c) => c.id === chainId) : undefined) ||
+    (chainId
+      ? {
+          id: chainId,
+          name: CHAIN_NAMES[String(chainId)] ?? `Chain ${chainId}`,
+          color: 'bg-gray-500',
+        }
+      : { id: 0, name: 'Select Network', color: 'bg-gray-400' });
+
+  const handleSwitch = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const next = Number(e.target.value);
+    try {
+      await switchNetwork(next);
+    } catch (err) {
+      onError?.(err);
+    }
   };
 
   return (
@@ -44,13 +67,14 @@ export const NetworkSwitcher: React.FC<NetworkSwitcherProps> = ({ className }) =
 
       <select
         className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-        value={chainId || ''}
+        value={chainId ?? ''}
         onChange={handleSwitch}
+        disabled={chainId === null}
       >
         <option value="" disabled>
           Select Network
         </option>
-        {SUPPORTED_CHAINS.map((chain) => (
+        {options.map((chain) => (
           <option key={chain.id} value={chain.id}>
             {chain.name}
           </option>

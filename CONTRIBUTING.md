@@ -49,3 +49,22 @@ npm run format
 ## License
 
 By contributing, you agree that your contributions will be licensed under its MIT License.
+
+## Release (Maintainers)
+
+This repo publishes to npm automatically when you push a git tag like `v0.0.8`.
+
+Prerequisites:
+
+- Add a repository secret named `NPM_TOKEN` with an npm access token that has publish rights for `privy-wallet-kit`.
+
+Release steps:
+
+1. Bump the version in `package.json` (and update `CHANGELOG.md`).
+2. Run `npm test` and `npm run build` locally.
+3. Commit and push to `main`.
+4. Tag and push:
+   - `git tag v0.0.8`
+   - `git push origin v0.0.8`
+
+GitHub Actions will verify the tag matches the `package.json` version, then run build/lint/tests, and finally `npm publish`.

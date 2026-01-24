@@ -2,6 +2,7 @@ import React from 'react';
 import { useWallets } from '@privy-io/react-auth';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { normalizeChainIdString } from '../utils/chain';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -39,7 +40,8 @@ export const NetworkBadge: React.FC<NetworkBadgeProps> = ({ className }) => {
 
   if (!wallet) return null;
 
-  const chainId = wallet.chainId.split(':')[1] || wallet.chainId;
+  const chainId = normalizeChainIdString(wallet.chainId);
+  if (!chainId) return null;
 
   return <NetworkBadgeView className={className} chainId={chainId} />;
 };

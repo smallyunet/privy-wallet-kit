@@ -7,6 +7,7 @@ import { NetworkBadge, NetworkBadgeView } from './NetworkBadge';
 import { ReceiveModal } from './ReceiveModal';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { normalizeChainIdString } from '../utils/chain';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -101,7 +102,7 @@ export const WalletCard: React.FC<WalletCardProps> = (props) => {
     return null;
   }
 
-  const chainId = wallet.chainId.split(':')[1] || wallet.chainId;
+  const chainId = normalizeChainIdString(wallet.chainId) ?? undefined;
 
   return (
     <WalletCardView
