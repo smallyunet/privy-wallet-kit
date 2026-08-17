@@ -5,6 +5,23 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.9] - 2026-08-17
+
+### Changed
+
+- Moved the project into maintenance mode; only critical compatibility and security fixes are planned.
+- Updated the documentation to describe the package as EVM-only and recommend Privy's official hooks for new transaction and signing flows.
+- Updated the Privy development dependency and expanded React peer support to React 18 and React 19.
+- Removed unused Playwright browser-test dependencies from the development toolchain.
+
+### Fixed
+
+- Removed simulated NFTs and transaction history. These hooks now require an application-provided indexer fetcher and otherwise return an empty list.
+- Added direct data and fetcher inputs to the NFT gallery and transaction history components.
+- Corrected the current `embeddedWallets.ethereum.createOnLogin` provider configuration in the README.
+- Included the previously unreleased stylesheet subpath export from v0.0.8.
+- Restored the missing bundled TypeScript declaration file referenced by the package metadata.
+
 ## [0.0.8] - 2026-01-24
 
 ### Added

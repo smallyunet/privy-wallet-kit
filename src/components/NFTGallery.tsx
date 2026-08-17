@@ -2,7 +2,7 @@ import React from 'react';
 import { Image as ImageIcon, ExternalLink, Loader2 } from 'lucide-react';
 import { clsx, type ClassValue } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { useNFTs, type NFT } from '../hooks/useNFTs';
+import { useNFTs, type NFT, type NFTFetcher } from '../hooks/useNFTs';
 
 function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -54,12 +54,27 @@ const NFTCard: React.FC<NFTCardProps> = ({ nft }) => {
 };
 
 interface NFTGalleryProps {
+  nfts?: NFT[];
+  fetcher?: NFTFetcher;
   className?: string;
   columns?: 2 | 3 | 4;
 }
 
-export const NFTGallery: React.FC<NFTGalleryProps> = ({ className, columns = 2 }) => {
-  const { nfts, loading, error } = useNFTs();
+export const NFTGallery: React.FC<NFTGalleryProps> = ({
+  nfts: providedNfts,
+  fetcher,
+  className,
+  columns = 2,
+}) => {
+  const {
+    nfts: fetchedNfts,
+    loading,
+    error,
+  } = useNFTs({
+    fetcher,
+    enabled: providedNfts === undefined,
+  });
+  const nfts = providedNfts ?? fetchedNfts;
 
   if (loading) {
     return (
@@ -82,8 +97,10 @@ export const NFTGallery: React.FC<NFTGalleryProps> = ({ className, columns = 2 }
     return (
       <div className="flex flex-col items-center justify-center py-12 text-center bg-muted/30 rounded-xl border border-dashed border-border">
         <ImageIcon size={32} className="text-muted-foreground/30 mb-2" />
-        <p className="text-sm text-muted-foreground font-medium">No NFTs found</p>
-        <p className="text-xs text-muted-foreground/70">Your digital assets will appear here</p>
+        <p className="text-sm text-muted-foreground font-medium">No NFT data</p>
+        <p className="text-xs text-muted-foreground/70">
+          Provide NFTs or configure an indexer-backed fetcher.
+        </p>
       </div>
     );
   }
