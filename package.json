@@ -1,6 +1,13 @@
 {
   "name": "privy-wallet-kit",
-  "version": "0.0.9",
+  "version": "0.0.10",
+  "description": "Maintenance-mode React components and hooks for Privy-connected EVM wallets.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/smallyunet/privy-wallet-kit"
+  },
+  "homepage": "https://github.com/smallyunet/privy-wallet-kit#readme",
+  "bugs": "https://github.com/smallyunet/privy-wallet-kit/issues",
   "type": "module",
   "main": "dist/privy-wallet-kit.umd.cjs",
   "module": "dist/privy-wallet-kit.js",
