@@ -1,116 +1,115 @@
-# Privy Wallet Kit 🛠️
+# Privy Wallet Kit
 
 [![npm version](https://img.shields.io/npm/v/privy-wallet-kit.svg?style=flat-square)](https://www.npmjs.com/package/privy-wallet-kit)
 [![npm downloads](https://img.shields.io/npm/dm/privy-wallet-kit.svg?style=flat-square)](https://www.npmjs.com/package/privy-wallet-kit)
 [![License](https://img.shields.io/npm/l/privy-wallet-kit.svg?style=flat-square)](https://github.com/smallyunet/privy-wallet-kit/blob/main/LICENSE)
 
-**Privy Wallet Kit** is an open-source React UI component library designed specifically for **Privy Embedded Wallets**.
+Privy Wallet Kit is an experimental React component and hook library for EVM wallets connected through Privy.
 
-It provides developers with "drop-in" components (like Token Lists, Transfer Forms, Transaction History) so you don't have to rebuild the UI for Privy's headless wallet system from scratch.
+> **Maintenance mode:** This project receives critical compatibility and security fixes only. No new features are planned. For new applications, prefer Privy's official React hooks and wallet UI components.
 
-> 🚧 **Status: Active Development** - This library is currently in early alpha.
+## Scope
 
-## 🌟 Features
+The package provides:
 
-- **🧩 Drop-in UI Components**: Ready-to-use components for common wallet operations like `AssetList`, `TransferForm`, `SignMessageForm`, and `NFTGallery`.
-- **🎣 Headless Hooks**: Logic is separated from UI. Use our hooks (`useWalletBalance`, `useTransfer`, `useSignMessage`, `useNFTs`, `useTransactionHistory`) to build your own custom UI if needed.
-- **🎨 Shadcn-like Architecture**: Built with Tailwind CSS. Components are fully customizable via `className` and designed to be copied/pasted or imported directly.
-- **⚡ Powered by Viem**: Robust and type-safe blockchain interactions.
-- **🔌 Network Management**: Built-in `NetworkSwitcher` and multi-chain support.
-- **⛽ Gas Estimation**: Automatic gas fee estimation for transactions.
-- **📜 Transaction History**: Built-in history fetching with auto-refresh support.
-- **🖼️ NFT Support**: Gallery component for digital assets.
-- **🔐 Zero Global State**: Relies on Privy's context. No Redux or Zustand required.
+- Presentational wallet components such as `WalletCard`, `AssetList`, `TransferForm`, `TransactionHistory`, and `NFTGallery`.
+- EVM-focused hooks for balances, ERC-20 assets, transfers, message signing, and network switching.
+- Optional fetcher interfaces for transaction history and NFT data.
 
-## 📦 Installation
+The package does **not** include an NFT or transaction-history indexer. `NFTGallery` and `TransactionHistory` must receive data directly or use an application-provided fetcher. They never generate placeholder wallet data.
 
-You can find the package on [npm](https://www.npmjs.com/package/privy-wallet-kit).
+This project does not support Privy's Solana or extended-chain wallets. It also does not replace Privy's current transaction confirmation UI, gas sponsorship, or funding flows.
+
+## Installation
 
 ```bash
-npm install privy-wallet-kit
-# Peer dependencies
-npm install @privy-io/react-auth viem react react-dom
+npm install privy-wallet-kit @privy-io/react-auth viem react react-dom
 ```
 
-## 🚀 Usage
+## Privy setup
 
-### 1. Setup Privy Provider
-
-Ensure your app is wrapped in the `PrivyProvider` from `@privy-io/react-auth`.
+Wrap the application with Privy's provider. The package supports React 18 and React 19.
 
 ```tsx
 import { PrivyProvider } from '@privy-io/react-auth';
 
-export const App = () => {
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <PrivyProvider
       appId="your-privy-app-id"
       config={{
         embeddedWallets: {
-          createOnLogin: 'users-without-wallets',
+          ethereum: {
+            createOnLogin: 'users-without-wallets',
+          },
         },
       }}
     >
-      <YourApp />
+      {children}
     </PrivyProvider>
   );
-};
+}
 ```
 
-### 2. Use Hooks (Headless)
+## Components and hooks
 
 ```tsx
-import { useWalletBalance, useNetwork, useTransfer } from 'privy-wallet-kit';
-
-const MyWallet = () => {
-  const { balance } = useWalletBalance();
-  const { chainId, switchNetwork } = useNetwork();
-  const { estimateGas, sendTransaction } = useTransfer();
-
-  return (
-    <div>
-      <p>Balance: {balance} ETH</p>
-      <p>Network: {chainId}</p>
-      <button onClick={() => switchNetwork(1)}>Switch to Mainnet</button>
-    </div>
-  );
-};
-```
-
-### 3. Use Components
-
-```tsx
-import { AssetList, TransferForm, NetworkSwitcher } from 'privy-wallet-kit';
+import { AssetList, NetworkSwitcher, TransferForm } from 'privy-wallet-kit';
 import 'privy-wallet-kit/style.css';
 
-const WalletPage = () => {
+export function WalletPage() {
   return (
-    <div className="p-4 max-w-md mx-auto space-y-4">
+    <div className="space-y-4">
       <NetworkSwitcher />
       <AssetList tokens={[]} />
-      <TransferForm
-        onReview={(details) => console.log(details)}
-        onCancel={() => console.log('cancelled')}
-      />
+      <TransferForm onReview={console.log} onCancel={() => undefined} />
     </div>
   );
-};
+}
 ```
 
-## 🗺️ Roadmap
+For new transaction and signing flows, prefer Privy's official `useSendTransaction` and `useSignMessage` hooks. The corresponding hooks in this package are retained for existing consumers.
 
-See the full roadmap in [ROADMAP.md](ROADMAP.md).
+## Indexed data
 
-## 🛠️ Tech Stack
+Pass already-fetched data to the presentational components:
 
-- **React 18+**
-- **Tailwind CSS**
-- **@privy-io/react-auth**
-- **Viem**
-- **Lucide React**
+```tsx
+import { NFTGallery, TransactionHistory } from 'privy-wallet-kit';
 
-## 📄 License
+<NFTGallery nfts={nftsFromYourIndexer} />;
+<TransactionHistory transactions={transactionsFromYourIndexer} />;
+```
+
+Or provide an indexer-backed fetcher:
+
+```tsx
+import { NFTGallery, TransactionHistory } from 'privy-wallet-kit';
+
+<NFTGallery
+  fetcher={({ address, chainId }) =>
+    fetch(`/api/nfts?address=${address}&chainId=${chainId}`).then((response) => response.json())
+  }
+/>;
+
+<TransactionHistory
+  fetcher={({ address, chainId }) =>
+    fetch(`/api/transactions?address=${address}&chainId=${chainId}`).then((response) =>
+      response.json(),
+    )
+  }
+/>;
+```
+
+The application is responsible for indexer credentials, pagination, normalization, and chain coverage.
+
+## Support policy
+
+- Critical security and compatibility fixes may be accepted.
+- Feature requests and roadmap expansion are out of scope.
+- APIs remain alpha and may not cover production requirements.
+- See the [Storybook](https://smallyunet.github.io/privy-wallet-kit/) for the currently documented components.
+
+## License
 
 MIT
-
-# privy-wallet-kit

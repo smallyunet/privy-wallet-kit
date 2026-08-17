@@ -8,7 +8,10 @@ function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
-import { useTransactionHistory } from '../hooks/useTransactionHistory';
+import {
+  useTransactionHistory,
+  type TransactionHistoryFetcher,
+} from '../hooks/useTransactionHistory';
 
 export interface Transaction {
   hash: string;
@@ -26,6 +29,7 @@ interface TransactionHistoryProps {
   className?: string;
   onTransactionClick?: (tx: Transaction) => void;
   autoFetch?: boolean;
+  fetcher?: TransactionHistoryFetcher;
 }
 
 export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
@@ -33,9 +37,11 @@ export const TransactionHistory: React.FC<TransactionHistoryProps> = ({
   className,
   onTransactionClick,
   autoFetch = true,
+  fetcher,
 }) => {
   const { transactions: hookTransactions, loading } = useTransactionHistory({
     enabled: autoFetch && !propsTransactions,
+    fetcher,
   });
 
   const transactions = propsTransactions || hookTransactions;

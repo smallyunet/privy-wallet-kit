@@ -35,49 +35,70 @@ describe('useNFTs', () => {
     expect(result.current.nfts).toEqual([]);
   });
 
-  it('should fetch NFTs when wallet is connected', async () => {
+  it('should not invent NFT data when no fetcher is configured', () => {
     mockedUseWallets.mockReturnValue({
       wallets: [{ address: '0x1234567890abcdef1234567890abcdef12345678' }],
     } as any);
 
     const { result } = renderHook(() => useNFTs());
 
-    // Initially loading
-    expect(result.current.loading).toBe(true);
+    expect(result.current.nfts).toEqual([]);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.configured).toBe(false);
+  });
 
-    // Wait for the mock API call to complete (1000ms delay in the hook)
-    await waitFor(
-      () => {
-        expect(result.current.loading).toBe(false);
+  it('should fetch NFTs from the configured data source', async () => {
+    const fetcher = vi.fn().mockResolvedValue([
+      {
+        contractAddress: '0xabc',
+        tokenId: '1',
+        name: 'Indexed NFT',
+        tokenType: 'ERC721',
       },
-      { timeout: 2000 },
-    );
+    ]);
+    mockedUseWallets.mockReturnValue({
+      wallets: [
+        {
+          address: '0x1234567890abcdef1234567890abcdef12345678',
+          chainId: 'eip155:1',
+        },
+      ],
+    } as any);
+
+    const { result } = renderHook(() => useNFTs({ fetcher }));
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
     expect(result.current.nfts).toHaveLength(1);
-    expect(result.current.nfts[0].name).toBe('Bored Ape #1234');
-    expect(result.current.nfts[0].tokenType).toBe('ERC721');
+    expect(result.current.nfts[0].name).toBe('Indexed NFT');
+    expect(result.current.configured).toBe(true);
+    expect(fetcher).toHaveBeenCalledWith({
+      address: '0x1234567890abcdef1234567890abcdef12345678',
+      chainId: 'eip155:1',
+    });
   });
 
   it('should provide refresh function', async () => {
+    let resolveFetch: (value: []) => void = () => undefined;
+    const fetcher = vi.fn().mockImplementation(
+      () =>
+        new Promise<[]>((resolve) => {
+          resolveFetch = resolve;
+        }),
+    );
     mockedUseWallets.mockReturnValue({
       wallets: [{ address: '0x1234567890abcdef1234567890abcdef12345678' }],
     } as any);
 
-    const { result } = renderHook(() => useNFTs());
+    const { result } = renderHook(() => useNFTs({ fetcher, refreshInterval: 0 }));
 
-    // Wait for initial fetch
-    await waitFor(
-      () => {
-        expect(result.current.loading).toBe(false);
-      },
-      { timeout: 2000 },
-    );
-
-    // Call refresh
-    act(() => {
-      result.current.refresh();
+    await waitFor(() => expect(result.current.loading).toBe(true));
+    await act(async () => {
+      resolveFetch([]);
     });
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
+    act(() => void result.current.refresh());
     expect(result.current.loading).toBe(true);
   });
 

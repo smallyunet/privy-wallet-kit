@@ -35,49 +35,72 @@ describe('useTransactionHistory', () => {
     expect(result.current.transactions).toEqual([]);
   });
 
-  it('should fetch transactions when wallet is connected', async () => {
+  it('should not invent transaction data when no fetcher is configured', () => {
     mockedUseWallets.mockReturnValue({
       wallets: [{ address: '0x1234567890abcdef1234567890abcdef12345678' }],
     } as any);
 
     const { result } = renderHook(() => useTransactionHistory());
 
-    // Initially loading
-    expect(result.current.loading).toBe(true);
+    expect(result.current.transactions).toEqual([]);
+    expect(result.current.loading).toBe(false);
+    expect(result.current.configured).toBe(false);
+  });
 
-    // Wait for the mock API call to complete (800ms delay in the hook)
-    await waitFor(
-      () => {
-        expect(result.current.loading).toBe(false);
+  it('should fetch transactions from the configured data source', async () => {
+    const fetcher = vi.fn().mockResolvedValue([
+      {
+        hash: '0x123',
+        type: 'send',
+        amount: '1',
+        symbol: 'ETH',
+        status: 'confirmed',
+        timestamp: 1,
       },
-      { timeout: 2000 },
-    );
+    ]);
+    mockedUseWallets.mockReturnValue({
+      wallets: [
+        {
+          address: '0x1234567890abcdef1234567890abcdef12345678',
+          chainId: 'eip155:1',
+        },
+      ],
+    } as any);
 
-    expect(result.current.transactions).toHaveLength(2);
+    const { result } = renderHook(() => useTransactionHistory({ fetcher }));
+
+    await waitFor(() => expect(result.current.loading).toBe(false));
+
+    expect(result.current.transactions).toHaveLength(1);
     expect(result.current.transactions[0].type).toBe('send');
-    expect(result.current.transactions[1].type).toBe('receive');
+    expect(result.current.configured).toBe(true);
+    expect(fetcher).toHaveBeenCalledWith({
+      address: '0x1234567890abcdef1234567890abcdef12345678',
+      chainId: 'eip155:1',
+    });
   });
 
   it('should provide refresh function', async () => {
+    let resolveFetch: (value: []) => void = () => undefined;
+    const fetcher = vi.fn().mockImplementation(
+      () =>
+        new Promise<[]>((resolve) => {
+          resolveFetch = resolve;
+        }),
+    );
     mockedUseWallets.mockReturnValue({
       wallets: [{ address: '0x1234567890abcdef1234567890abcdef12345678' }],
     } as any);
 
-    const { result } = renderHook(() => useTransactionHistory());
+    const { result } = renderHook(() => useTransactionHistory({ fetcher, refreshInterval: 0 }));
 
-    // Wait for initial fetch
-    await waitFor(
-      () => {
-        expect(result.current.loading).toBe(false);
-      },
-      { timeout: 2000 },
-    );
-
-    // Call refresh
-    act(() => {
-      result.current.refresh();
+    await waitFor(() => expect(result.current.loading).toBe(true));
+    await act(async () => {
+      resolveFetch([]);
     });
+    await waitFor(() => expect(result.current.loading).toBe(false));
 
+    act(() => void result.current.refresh());
     expect(result.current.loading).toBe(true);
   });
 

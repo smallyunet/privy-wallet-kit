@@ -1,6 +1,6 @@
-# 🗺️ Privy Wallet Kit Roadmap
+# Privy Wallet Kit Roadmap
 
-This roadmap outlines the development plan to build a comprehensive, "MetaMask-like" UI component library for Privy Embedded Wallets.
+> **Maintenance mode:** The original feature roadmap is closed. The project now accepts critical compatibility and security fixes only. The checklist below is retained as historical context and does not represent planned work.
 
 ## Phase 1: Foundation & Core Hooks (Current Focus)
 
@@ -37,8 +37,8 @@ Build the visible building blocks that developers can drop into their apps.
   - Input: Amount (with "Max" button).
   - Selector: Token selection.
 - [x] **`TransactionReview`**: A summary view before confirming the transaction (Gas fee est., Total).
-- [x] **`TransactionHistory`**: A list of past transactions (Sent/Received).
-  - Integrated with `useTransactionHistory` hook for auto-fetching.
+- [x] **`TransactionHistory`**: A presentational list of past transactions.
+  - Accepts caller-provided data or an application-provided indexer fetcher.
 
 ## Phase 3: Developer Experience (DX) & Demo
 
@@ -56,9 +56,9 @@ Make it easy for developers to adopt and test.
 
 - [x] **Sign Message Support**: UI and hooks for signing plain text and typed data.
 - [x] **Network Switcher**: UI to switch between supported chains (Mainnet, Polygon, Base, etc.).
-- [x] **NFT Gallery**: Simple grid view for owned NFTs.
-- [ ] **Swap Interface**: (Optional) Basic UI for swapping tokens (integration with Uniswap/0x API).
-- [ ] **Fiat On-ramp**: Integration with providers (MoonPay/Stripe) if Privy supports it directly via UI.
+- [x] **NFT Gallery**: Presentational grid for caller-provided or indexer-fetched NFTs.
+- [ ] **Swap Interface**: Not planned.
+- [ ] **Fiat On-ramp**: Not planned; use Privy's official funding flows.
 
 ## Phase 5: Quality Assurance & Release
 
