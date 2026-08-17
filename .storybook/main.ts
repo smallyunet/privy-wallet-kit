@@ -16,6 +16,13 @@ const config: StorybookConfig = {
   ],
   framework: '@storybook/react-vite',
   async viteFinal(config) {
+    // Declaration generation belongs to the library build. Running vite-plugin-dts
+    // inside Storybook writes outside storybook-static and fails in a clean checkout.
+    config.plugins = config.plugins?.filter(
+      (plugin) =>
+        !(plugin && typeof plugin === 'object' && 'name' in plugin && plugin.name === 'vite:dts'),
+    );
+
     return mergeConfig(config, {
       resolve: {
         alias: {
